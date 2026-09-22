@@ -32,6 +32,12 @@ We partner with startups and enterprises to design, build, and scale reliable so
                 </a>
               ))}
             </div>
+            <a
+              href="/admin/login"
+              className="mt-6 inline-flex rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-brand-400/50 hover:text-brand-300"
+            >
+              Admin login
+            </a>
           </div>
 
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8 lg:col-span-8">
