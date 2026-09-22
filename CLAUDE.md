@@ -46,3 +46,13 @@ There is no test suite configured. When type-checking a single file, prefer `npx
 - The desktop nav active-link indicator and the Portfolio filter pill both use a shared `layoutId` (`motion.span` with `layoutId="nav-active-pill"` / `"portfolio-filter-pill"`) so the highlight slides between items instead of jumping — keep that pattern for any similar tab/pill UI.
 - `Button`/`LinkButton` are `motion.button`/`motion(Link)` with `whileHover`/`whileTap` baked in — new buttons should go through these rather than raw `<button>`/`<Link>` to stay visually consistent.
 - Framer Motion + spreading native HTML props onto a motion component needs the drag/animation event handlers omitted (see `NativeButtonProps` in [src/components/ui/Button.tsx](src/components/ui/Button.tsx)) — copy that `Omit<...>` pattern if you wrap another native element in `motion.*` and spread `...rest` onto it, otherwise `tsc` will fail on conflicting `onDrag*`/`onAnimation*` signatures.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

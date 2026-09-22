@@ -42,7 +42,7 @@ export default function About() {
             <p>
              NexGenCode.in was founded with a clear vision: to make high-quality software development more agile, transparent, and reliable. We saw an opportunity to combine the speed and flexibility of a startup with the engineering standards and accountability expected from an experienced technology partner.
 
-Today, we work with startups, growing businesses, and enterprises to transform ideas into scalable digital products. From an initial concept and rapid prototype to production-ready platforms and long-term technology solutions, we bring the same commitment to quality, innovation, performance, and attention to detail at every stage.
+              Today, we work with startups, growing businesses, and enterprises to transform ideas into scalable digital products. From an initial concept and rapid prototype to production-ready platforms and long-term technology solutions, we bring the same commitment to quality, innovation, performance, and attention to detail at every stage.
             </p>
             <p>
              Our goal is simple — build technology that solves real business problems, creates lasting value, and is ready to scale with your ambitions.

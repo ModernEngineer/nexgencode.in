@@ -2,13 +2,13 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Layout from './components/layout/Layout';
 import { easeOut } from './lib/motion';
-import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import Portfolio from './pages/Portfolio';
+import Home from './legacy-pages/Home';
+import About from './legacy-pages/About';
+import Services from './legacy-pages/Services';
+import Portfolio from './legacy-pages/Portfolio';
 // import Careers from './pages/Careers';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+import Contact from './legacy-pages/Contact';
+import NotFound from './legacy-pages/NotFound';
 
 function AnimatedRoutes() {
   const location = useLocation();
