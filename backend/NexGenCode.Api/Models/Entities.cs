@@ -170,3 +170,24 @@ public class Project
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
+
+/// <summary>A social media / profile link shown as an icon in the website footer.</summary>
+public class SocialLink
+{
+    public int Id { get; set; }
+
+    /// <summary>Icon key: linkedin, instagram, facebook, twitter, youtube, github, whatsapp, telegram, email, website.</summary>
+    [MaxLength(30)]
+    public required string Platform { get; set; }
+
+    /// <summary>Tooltip / accessible name, e.g. "NexGenCode on LinkedIn".</summary>
+    [MaxLength(80)]
+    public string? Label { get; set; }
+
+    [MaxLength(500)]
+    public required string Url { get; set; }
+
+    public int DisplayOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}

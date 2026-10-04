@@ -125,3 +125,19 @@ public record ProjectInput(
     [MaxLength(80)] string? Accent,
     bool IsActive = true,
     bool IsFeatured = false);
+
+// ---------- Social links (footer icons) ----------
+
+public record SocialLinkDto(int Id, string Platform, string? Label, string Url, int DisplayOrder, bool IsActive)
+{
+    public static SocialLinkDto From(SocialLink s) => new(s.Id, s.Platform, s.Label, s.Url, s.DisplayOrder, s.IsActive);
+}
+
+public record SocialLinkInput(
+    [Required, RegularExpression("^(linkedin|instagram|facebook|twitter|youtube|github|whatsapp|telegram|email|website)$",
+        ErrorMessage = "Unknown platform.")] string Platform,
+    [MaxLength(80)] string? Label,
+    // Only web links, email and phone — never javascript: or data: URLs
+    [Required, MaxLength(500), RegularExpression(@"^(https?://\S+|mailto:\S+|tel:\+?[\d\s-]+)$",
+        ErrorMessage = "Enter a full link starting with https:// (or mailto: for email).")] string Url,
+    bool IsActive = true);

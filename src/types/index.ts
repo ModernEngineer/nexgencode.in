@@ -110,3 +110,25 @@ export interface NavLink {
   label: string;
   path: string;
 }
+
+/** Footer social icon as returned by GET /api/social-links (managed in Admin → Social Links). */
+export interface SocialLink {
+  id: number;
+  platform: SocialPlatform;
+  label?: string | null;
+  url: string;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export type SocialPlatform =
+  | 'linkedin'
+  | 'instagram'
+  | 'facebook'
+  | 'twitter'
+  | 'youtube'
+  | 'github'
+  | 'whatsapp'
+  | 'telegram'
+  | 'email'
+  | 'website';

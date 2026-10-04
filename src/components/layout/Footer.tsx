@@ -5,9 +5,15 @@ import Logo from '../ui/Logo';
 import { footerCompanyLinks, legalLinks } from '../../data/nav';
 import { serviceCategories, getServicesByCategory } from '../../data/services';
 import { contactInfo, whatsappLink } from '../../data/contact';
+import SocialIcon from '../ui/SocialIcon';
+import { useApiData } from '../../hooks/useApiData';
+import { getSocialLinks } from '../../lib/publicApi';
+import { fallbackSocialLinks, platformLabel } from '../../data/social';
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  // Icons, links and visibility are managed in Admin → Social Links
+  const { data: socialLinks } = useApiData((signal) => getSocialLinks(signal), fallbackSocialLinks);
 
   return (
     <footer className="relative overflow-hidden border-t border-white/5 bg-navy-950 text-ink-300">
@@ -22,6 +28,26 @@ export default function Footer() {
               Professional technology & digital solutions — software, apps, websites and marketing designed for real
               business growth.
             </p>
+            {socialLinks && socialLinks.length > 0 && (
+              <ul className="mt-5 flex flex-wrap gap-2.5" aria-label="NexGenCode on social media">
+                {socialLinks.map((link) => {
+                  const name = link.label || `NexGenCode on ${platformLabel(link.platform)}`;
+                  return (
+                    <li key={link.id}>
+                      <a
+                        href={link.url}
+                        {...(link.url.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        aria-label={name}
+                        title={name}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-ink-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-400/50 hover:bg-brand-500/15 hover:text-brand-300"
+                      >
+                        <SocialIcon platform={link.platform} size={17} />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
             <ul className="mt-6 space-y-3 text-sm">
               <li>
                 <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-3 hover:text-white">

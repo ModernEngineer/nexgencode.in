@@ -1,5 +1,5 @@
 import { api } from '../lib/api';
-import type { Project, TeamMember } from '../types';
+import type { Project, SocialLink, TeamMember } from '../types';
 
 export type EnquiryStatus = 'New' | 'InProgress' | 'Closed';
 
@@ -33,6 +33,7 @@ export interface AdminReview {
 }
 
 export type ReviewInput = Omit<AdminReview, 'id' | 'source' | 'createdAt'>;
+export type SocialLinkInput = Omit<SocialLink, 'id' | 'displayOrder'>;
 export type ProjectInput = Omit<Project, 'id' | 'displayOrder'>;
 export type TeamMemberInput = Omit<TeamMember, 'id' | 'displayOrder'> & { displayOrder?: number | null };
 
@@ -104,6 +105,16 @@ export const adminApi = {
     api<void>(`/api/admin/projects/${id}/featured`, { ...auth, method: 'PATCH', body: isFeatured }),
   reorderProjects: (ids: number[]) => api<void>('/api/admin/projects/reorder', { ...auth, method: 'PUT', body: { ids } }),
   deleteProject: (id: number) => api<void>(`/api/admin/projects/${id}`, { ...auth, method: 'DELETE' }),
+
+  // Footer social icons
+  socialLinks: () => api<SocialLink[]>('/api/admin/social-links', auth),
+  createSocialLink: (body: SocialLinkInput) => api<SocialLink>('/api/admin/social-links', { ...auth, method: 'POST', body }),
+  updateSocialLink: (id: number, body: SocialLinkInput) =>
+    api<SocialLink>(`/api/admin/social-links/${id}`, { ...auth, method: 'PUT', body }),
+  setSocialLinkActive: (id: number, isActive: boolean) =>
+    api<void>(`/api/admin/social-links/${id}/active`, { ...auth, method: 'PATCH', body: isActive }),
+  reorderSocialLinks: (ids: number[]) => api<void>('/api/admin/social-links/reorder', { ...auth, method: 'PUT', body: { ids } }),
+  deleteSocialLink: (id: number) => api<void>(`/api/admin/social-links/${id}`, { ...auth, method: 'DELETE' }),
 
   // Uploads & account
   uploadImage: (file: File) => {

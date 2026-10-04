@@ -135,6 +135,23 @@ public static class DbSeeder
             db.Projects.AddRange(projects);
         }
 
+        if (!await db.SocialLinks.AnyAsync())
+        {
+            // Dummy profile links — replace them in Admin → Social Links
+            string[][] links =
+            [
+                ["linkedin", "NexGenCode on LinkedIn", "https://www.linkedin.com/company/your-company-page"],
+                ["instagram", "NexGenCode on Instagram", "https://www.instagram.com/your-instagram-handle"],
+                ["facebook", "NexGenCode on Facebook", "https://www.facebook.com/your-facebook-page"],
+                ["twitter", "NexGenCode on X (Twitter)", "https://x.com/your-x-handle"],
+                ["youtube", "NexGenCode on YouTube", "https://www.youtube.com/@your-channel"],
+            ];
+            db.SocialLinks.AddRange(links.Select((l, i) => new SocialLink
+            {
+                Platform = l[0], Label = l[1], Url = l[2], DisplayOrder = i + 1, IsActive = true,
+            }));
+        }
+
         await db.SaveChangesAsync();
     }
 }
