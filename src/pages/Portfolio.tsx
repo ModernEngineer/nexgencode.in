@@ -6,8 +6,10 @@ import Container from '../components/ui/Container';
 import CTASection from '../components/sections/CTASection';
 import { projects, projectCategories } from '../data/projects';
 import { easeOut } from '../lib/motion';
+import { useSeo } from '../hooks/useSeo';
 
 export default function Portfolio() {
+  useSeo();
   const [active, setActive] = useState('All');
   const filtered = active === 'All' ? projects : projects.filter((p) => p.category === active);
 
@@ -36,7 +38,7 @@ export default function Portfolio() {
                   {isActive && (
                     <motion.span
                       layoutId="portfolio-filter-pill"
-                      className="absolute inset-0 rounded-full bg-brand-600"
+                      className="absolute inset-0 rounded-full bg-brand-500"
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -57,7 +59,7 @@ export default function Portfolio() {
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.35, ease: easeOut }}
                   whileHover={{ y: -6 }}
-                  className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-colors duration-300 hover:border-brand-400/30 ${project.url ? 'cursor-pointer' : ''}`}
+                  className={`group overflow-hidden rounded-2xl border border-white/10 bg-ink-900/60  transition-colors duration-300 hover:border-brand-400/30 ${project.url ? 'cursor-pointer' : ''}`}
                   onClick={() => project.url && window.open(project.url, '_blank', 'noopener,noreferrer')}
                   onKeyDown={(event) => {
                     if (project.url && (event.key === 'Enter' || event.key === ' ')) {
@@ -73,6 +75,10 @@ export default function Portfolio() {
                       <img
                         src={project.image}
                         alt={`${project.title} preview`}
+                        loading="lazy"
+                        decoding="async"
+                        width={640}
+                        height={360}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
@@ -87,7 +93,7 @@ export default function Portfolio() {
                     <p className="mt-2 text-sm leading-relaxed text-ink-400">{project.description}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
-                        <span key={tag} className="rounded-full bg-white/5 px-3 py-1 text-xs text-ink-300">
+                        <span key={tag} className="rounded-full bg-white/[0.04] px-3 py-1 text-xs text-ink-300">
                           {tag}
                         </span>
                       ))}

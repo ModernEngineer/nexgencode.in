@@ -2,28 +2,28 @@ import type { FAQItem } from '../types';
 
 export const faqs: FAQItem[] = [
   {
-    question: 'What industries does NexGenCode.in work with?',
+    question: 'What kind of businesses does NexGenCode work with?',
     answer:
-      'We work with startups and enterprises across fintech, healthcare, e-commerce, logistics and SaaS — anywhere a reliable software team adds leverage.',
+      'We work with schools and colleges, hospitals and clinics, hotels and guest houses, retail stores and restaurants, real estate businesses, and startups or companies that need custom software, apps, websites or digital marketing.',
   },
   {
-    question: 'How do you structure engagements?',
+    question: 'Can your management software be customized for our workflows?',
     answer:
-      'Most projects start with a scoping workshop, followed by fixed-scope milestones or a dedicated team model — whichever fits your timeline and budget better.',
+      'Yes. Our School ERP, Hospital, Hotel, POS, CRM and Real Estate solutions are configured around your processes, user roles and reports — and we can build additional modules where needed.',
   },
   {
-    question: 'Do you work with early-stage startups?',
+    question: 'How do you structure a project?',
     answer:
-      'Yes. We regularly help early-stage teams go from idea to MVP, and later help scale that MVP into a production-grade platform.',
+      'We follow a seven-step process: discovery, planning & architecture, UI/UX design, development, testing, deployment, and ongoing support — with clear milestones and regular updates throughout.',
   },
   {
-    question: 'What does a typical timeline look like?',
+    question: 'Do you handle hosting, deployment and maintenance?',
     answer:
-      'A focused MVP typically takes 8-12 weeks. Larger platform builds are scoped into milestones so you see working software every 2-3 weeks.',
+      'Yes. We set up cloud hosting, domains, SSL, databases and backups, and offer maintenance plans covering bug fixes, security updates, monitoring and improvements after launch.',
   },
   {
-    question: 'Can you take over an existing codebase?',
+    question: 'Do you also provide SEO and digital marketing?',
     answer:
-      'Yes — we regularly onboard onto existing codebases, starting with a technical audit before proposing a roadmap forward.',
+      'Yes — SEO, Meta Ads, Google Ads, social media, content marketing and PR, so the products we build can also attract customers and generate leads.',
   },
 ];

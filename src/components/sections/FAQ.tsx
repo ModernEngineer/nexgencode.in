@@ -16,7 +16,7 @@ export default function FAQ() {
       <Container className="max-w-3xl">
         <SectionHeading eyebrow="FAQ" title="Frequently asked questions" />
 
-        <StaggerGroup className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03]">
+        <StaggerGroup className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10 bg-ink-900/60">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (

@@ -1,38 +1,64 @@
-import { Quote } from 'lucide-react';
+import { ArrowRight, PenLine } from 'lucide-react';
 import Container from '../ui/Container';
 import SectionHeading from '../ui/SectionHeading';
+import ReviewCard from '../ui/ReviewCard';
+import { StarRating } from '../ui/StarRating';
+import { LinkButton } from '../ui/Button';
 import { StaggerGroup, StaggerItem } from '../motion/Stagger';
-import { testimonials } from '../../data/testimonials';
+import Reveal from '../motion/Reveal';
+import { useApiData } from '../../hooks/useApiData';
+import { getReviews } from '../../lib/publicApi';
+import { fallbackReviews } from '../../data/reviews';
 
-export default function Testimonials() {
+/** Client reviews — only reviews enabled in Admin → Reviews are returned by the API. */
+export default function Testimonials({ limit = 6 }: { limit?: number }) {
+  const { data, loading } = useApiData((signal) => getReviews(limit, signal), fallbackReviews);
+
+  if (!loading && data!.items.length === 0) return null;
+
   return (
-    <section className="border-y border-white/5 bg-ink-900/40 py-24">
+    <section className="border-y border-white/5 bg-gradient-to-b from-ink-900/60 to-ink-950 py-24">
       <Container>
-        <SectionHeading eyebrow="Client feedback" title="What our clients say" />
+        <SectionHeading
+          eyebrow="Client reviews"
+          title="What our clients say"
+          description="Schools, hospitals, hotels, retailers and growing businesses across India trust NexGenCode."
+        />
 
-        <StaggerGroup className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {testimonials.map((t) => (
-            <StaggerItem
-              key={t.id}
-              whileHover={{ y: -4 }}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 transition-colors hover:border-brand-400/20"
-            >
-              <Quote className="text-brand-500/40" size={28} />
-              <p className="mt-4 text-base leading-relaxed text-ink-200">"{t.quote}"</p>
-              <div className="mt-6 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500/15 text-sm font-semibold text-brand-300">
-                  {t.initials}
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs text-ink-400">
-                    {t.role}, {t.company}
-                  </p>
-                </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
+        {data && data.count > 0 && (
+          <Reveal className="mt-8 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
+            <span className="font-display text-4xl font-bold text-white">{data.average.toFixed(1)}</span>
+            <div className="flex flex-col items-center sm:items-start">
+              <StarRating value={data.average} size={20} />
+              <span className="mt-1 text-sm text-ink-400">Based on {data.count} client reviews</span>
+            </div>
+          </Reveal>
+        )}
+
+        {loading ? (
+          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }, (_, i) => (
+              <div key={i} className="h-64 animate-pulse rounded-2xl border border-white/10 bg-ink-900/60" />
+            ))}
+          </div>
+        ) : (
+          <StaggerGroup className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {data!.items.map((review) => (
+              <StaggerItem key={review.id} whileHover={{ y: -4 }} className="h-full">
+                <ReviewCard review={review} />
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        )}
+
+        <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
+          <LinkButton to="/reviews" variant="secondary" size="md">
+            Read all reviews <ArrowRight size={16} />
+          </LinkButton>
+          <LinkButton to="/reviews#write-review" variant="ghost" size="md">
+            <PenLine size={16} /> Write a review
+          </LinkButton>
+        </div>
       </Container>
     </section>
   );

@@ -2,8 +2,11 @@ import { motion } from 'framer-motion';
 import Container from '../components/ui/Container';
 import { LinkButton } from '../components/ui/Button';
 import { easeOut } from '../lib/motion';
+import { useSeo } from '../hooks/useSeo';
 
 export default function NotFound() {
+  useSeo({ noindex: true });
+
   return (
     <section className="flex min-h-[70vh] items-center justify-center py-24">
       <Container className="text-center">
@@ -11,7 +14,7 @@ export default function NotFound() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="font-display text-7xl font-bold text-brand-500/30"
+          className="font-display text-7xl font-bold text-gradient"
         >
           404
         </motion.p>

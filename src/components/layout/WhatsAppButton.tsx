@@ -1,10 +1,8 @@
 import { motion } from 'framer-motion';
-
-const WHATSAPP_NUMBER = '919554058799';
-const DEFAULT_MESSAGE = "Hi LogicMitra, I'd like to know more about your services.";
+import { whatsappLink } from '../../data/contact';
 
 export default function WhatsAppButton() {
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`;
+  const href = whatsappLink();
 
   return (
     <motion.a

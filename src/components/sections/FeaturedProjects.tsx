@@ -20,7 +20,7 @@ export default function FeaturedProjects() {
             <StaggerItem
               key={project.id}
               whileHover={{ y: -6 }}
-              className={`group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-colors duration-300 hover:border-brand-400/30 ${project.url ? 'cursor-pointer' : ''}`}
+              className={`group overflow-hidden rounded-2xl border border-white/10 bg-ink-900/60  transition-colors duration-300 hover:border-brand-400/30 ${project.url ? 'cursor-pointer' : ''}`}
               onClick={() => project.url && window.open(project.url, '_blank', 'noopener,noreferrer')}
               onKeyDown={(event) => {
                 if (project.url && (event.key === 'Enter' || event.key === ' ')) {
@@ -36,6 +36,10 @@ export default function FeaturedProjects() {
                   <img
                     src={project.image}
                     alt={`${project.title} preview`}
+                    loading="lazy"
+                    decoding="async"
+                    width={640}
+                    height={360}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
@@ -50,7 +54,7 @@ export default function FeaturedProjects() {
                 <p className="mt-2 text-sm leading-relaxed text-ink-400">{project.description}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-white/5 px-3 py-1 text-xs text-ink-300">
+                    <span key={tag} className="rounded-full bg-white/[0.04] px-3 py-1 text-xs text-ink-300">
                       {tag}
                     </span>
                   ))}

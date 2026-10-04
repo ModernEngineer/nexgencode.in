@@ -1,75 +1,121 @@
-import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import Container from '../components/ui/Container';
+import SectionHeading from '../components/ui/SectionHeading';
+import ServiceCard from '../components/ui/ServiceCard';
 import { LinkButton } from '../components/ui/Button';
-import FAQ from '../components/sections/FAQ';
+import { StaggerGroup, StaggerItem } from '../components/motion/Stagger';
+import TechStackGrid from '../components/sections/TechStackGrid';
+import Process from '../components/sections/Process';
+import WhyChooseUs from '../components/sections/WhyChooseUs';
 import CTASection from '../components/sections/CTASection';
-import { services } from '../data/services';
+import { services, serviceCategories, getServicesByCategory } from '../data/services';
 import { iconMap } from '../lib/icons';
-import { easeOut, viewportOnce } from '../lib/motion';
+import { useSeo } from '../hooks/useSeo';
 
 export default function Services() {
+  useSeo();
+
   return (
     <>
+      {/* 1. Hero */}
       <PageHeader
-        eyebrow="Services"
-        title="Full-lifecycle software engineering"
-        description="Whichever stage your product is at, we plug in where you need us most — from a single feature to the full build."
+        eyebrow="Our Services"
+        title="Technology Solutions Built for Modern Businesses"
+        description="NexGenCode delivers scalable software, web, mobile and digital solutions designed to simplify operations, improve customer experiences and help businesses grow. From industry-specific management systems to custom technology and digital marketing, we build solutions around real business needs."
+        actions={
+          <>
+            <LinkButton to="/contact" size="lg">
+              Get a Free Consultation <ArrowRight size={18} />
+            </LinkButton>
+            <LinkButton to="/services#overview" variant="secondary" size="lg">
+              Explore Our Services
+            </LinkButton>
+          </>
+        }
       />
 
-      <section className="py-24">
-        <Container className="space-y-16">
-          {services.map((service, i) => {
-            const Icon = iconMap[service.icon];
-            const reversed = i % 2 === 1;
-            return (
-              <div
-                key={service.slug}
-                id={service.slug}
-                className={`grid scroll-mt-24 grid-cols-1 items-center gap-10 lg:grid-cols-2 ${
-                  reversed ? 'lg:[&>*:first-child]:order-2' : ''
-                }`}
-              >
-                <motion.div
-                  initial={{ opacity: 0, x: reversed ? 40 : -40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={viewportOnce}
-                  transition={{ duration: 0.6, ease: easeOut }}
-                >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-400">
-                    {Icon && <Icon size={26} />}
-                  </div>
-                  <h2 className="mt-5 font-display text-2xl font-bold text-white sm:text-3xl">{service.title}</h2>
-                  <p className="mt-4 text-base leading-relaxed text-ink-300">{service.description}</p>
-                  <LinkButton to="/contact" variant="secondary" size="md" className="mt-6">
-                    Discuss this service
-                  </LinkButton>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: reversed ? -40 : 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={viewportOnce}
-                  transition={{ duration: 0.6, ease: easeOut, delay: 0.1 }}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-8"
-                >
-                  <p className="text-sm font-semibold uppercase tracking-wider text-ink-400">What's included</p>
-                  <ul className="mt-4 space-y-3">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-sm text-ink-200">
-                        <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-brand-400" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </div>
-            );
-          })}
+      {/* 2. Overview — category tiles that jump to each group */}
+      <section id="overview" className="scroll-mt-24 py-20">
+        <Container>
+          <SectionHeading
+            eyebrow="Services overview"
+            title={`${services.length} services, one technology partner`}
+            description="Explore our solutions by category — from business software to marketing and long-term support."
+          />
+          <StaggerGroup className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {serviceCategories.map((cat) => {
+              const Icon = iconMap[cat.icon];
+              const count = getServicesByCategory(cat.id).length;
+              return (
+                <StaggerItem key={cat.id} whileHover={{ y: -6 }} className="h-full">
+                  <Link
+                    to={`/services#${cat.id}`}
+                    className="group flex h-full flex-col rounded-2xl border-gradient p-6 transition-shadow hover:shadow-lg hover:shadow-brand-500/10"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-accent-500 text-ink-950">
+                        {Icon && <Icon size={22} />}
+                      </span>
+                      <span className="font-display text-3xl font-bold text-ink-300">
+                        {String(count).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 font-display text-lg font-semibold text-white">{cat.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-400">{cat.description}</p>
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-brand-300">
+                      View {count} services
+                      <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                </StaggerItem>
+              );
+            })}
+          </StaggerGroup>
         </Container>
       </section>
 
-      <FAQ />
+      {/* 3–6. One section per category */}
+      {serviceCategories.map((cat, ci) => {
+        const items = getServicesByCategory(cat.id);
+        // Running index so cards are numbered 01–21 across all categories
+        const offset = serviceCategories.slice(0, ci).reduce((n, c) => n + getServicesByCategory(c.id).length, 0);
+        return (
+          <section
+            key={cat.id}
+            id={cat.id}
+            className={`scroll-mt-24 py-24 ${ci % 2 === 0 ? 'border-y border-white/5 bg-ink-900/40' : ''}`}
+          >
+            <Container>
+              <SectionHeading eyebrow={cat.title} title={cat.heading} description={cat.description} />
+              <StaggerGroup className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {items.map((service, i) => (
+                  <StaggerItem
+                    key={service.slug}
+                    id={service.slug}
+                    whileHover={{ y: -6 }}
+                    className="h-full scroll-mt-28"
+                  >
+                    <ServiceCard service={service} index={offset + i} />
+                  </StaggerItem>
+                ))}
+              </StaggerGroup>
+            </Container>
+          </section>
+        );
+      })}
+
+      {/* 7. Tech stack */}
+      <TechStackGrid />
+
+      {/* 8. Process */}
+      <Process />
+
+      {/* 9. Why choose us */}
+      <WhyChooseUs />
+
+      {/* 10. Closing CTA */}
       <CTASection />
     </>
   );

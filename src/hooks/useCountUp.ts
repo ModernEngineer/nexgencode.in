@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 export function useCountUp(target: number, duration = 1500) {
-  const [value, setValue] = useState(0);
+  // Start at the final value so prerendered HTML shows real numbers; the animation restarts from 0 on scroll-in
+  const [value, setValue] = useState(target);
   const ref = useRef<HTMLDivElement | null>(null);
   const started = useRef(false);
 

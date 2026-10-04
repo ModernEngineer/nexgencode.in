@@ -1,0 +1,23 @@
+# /etc/systemd/system/nexgencode-api.service
+# Runs the published .NET API (dotnet publish output) on http://127.0.0.1:5080 behind Nginx.
+[Unit]
+Description=NexGenCode .NET API
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/nexgencode.in/api
+ExecStart=/usr/bin/dotnet /var/www/nexgencode.in/api/NexGenCode.Api.dll
+Restart=always
+RestartSec=5
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5080
+Environment=DOTNET_NOLOGO=1
+# Secrets live in this file (chmod 600, owned by root):
+#   ConnectionStrings__Default=Server=localhost;Database=NexGenCodeDb;User Id=nexgencode;Password=...;TrustServerCertificate=True
+#   Jwt__Key=<64+ random characters>
+#   Admin__DefaultPassword=<first admin password>
+EnvironmentFile=/etc/nexgencode-api.env
+
+[Install]
+WantedBy=multi-user.target

@@ -5,8 +5,11 @@ import SectionHeading from '../components/ui/SectionHeading';
 import { LinkButton } from '../components/ui/Button';
 import { StaggerGroup, StaggerItem } from '../components/motion/Stagger';
 import { jobOpenings, perks } from '../data/careers';
+import { useSeo } from '../hooks/useSeo';
 
 export default function Careers() {
+  useSeo();
+
   return (
     <>
       <PageHeader
@@ -17,13 +20,13 @@ export default function Careers() {
 
       <section className="py-24">
         <Container>
-          <SectionHeading eyebrow="Life at LogicMitra" title="What you get as part of the team" />
+          <SectionHeading eyebrow="Life at NexGenCode" title="What you get as part of the team" />
           <StaggerGroup className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {perks.map((perk) => (
               <StaggerItem
                 key={perk.title}
                 whileHover={{ y: -4 }}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-brand-400/20"
+                className="rounded-2xl border border-white/10 bg-ink-900/60  p-6 transition-colors hover:border-brand-400/20"
               >
                 <h3 className="font-semibold text-white">{perk.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-400">{perk.description}</p>
@@ -42,7 +45,7 @@ export default function Careers() {
               <StaggerItem
                 key={job.id}
                 whileHover={{ x: 4 }}
-                className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-brand-400/20 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-ink-900/60  p-6 transition-colors hover:border-brand-400/20 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <h3 className="font-display text-lg font-semibold text-white">{job.title}</h3>
