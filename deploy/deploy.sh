@@ -10,6 +10,7 @@ REPO_DIR="${REPO_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
 WEB_ROOT="${WEB_ROOT:-/var/www/nexgencode.in/html}"
 API_DIR="${API_DIR:-/var/www/nexgencode.in/api}"
 API_SERVICE="${API_SERVICE:-nexgencode-api}"
+API_PORT="${API_PORT:-5090}"
 
 DO_WEB=1; DO_API=1
 case "${1:-}" in
@@ -35,7 +36,7 @@ if [[ $DO_API == 1 ]]; then
   echo "==> Restarting $API_SERVICE (applies database migrations on startup)"
   sudo systemctl restart "$API_SERVICE"
   for i in $(seq 1 30); do
-    if curl -fsS http://127.0.0.1:5080/api/health >/dev/null 2>&1; then echo "API is up"; break; fi
+    if curl -fsS http://127.0.0.1:$API_PORT/api/health >/dev/null 2>&1; then echo "API is up"; break; fi
     if [[ $i == 30 ]]; then echo "API did not start — check: sudo journalctl -u $API_SERVICE -n 50"; exit 1; fi
     sleep 1
   done
