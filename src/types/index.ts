@@ -31,15 +31,21 @@ export interface Highlight {
   icon: string;
 }
 
+/** Portfolio project as returned by GET /api/projects (managed in Admin → Portfolio). */
 export interface Project {
-  id: string;
+  id: number;
   title: string;
   category: string;
   description: string;
+  imageUrl?: string | null;
   tags: string[];
+  /** Live link (Vercel deploy, website…). Cards with a URL open it in a new tab. */
+  url?: string | null;
+  /** Gradient key from src/data/accents.ts, shown when there is no image */
   accent: string;
-  image?: string;
-  url?: string;
+  displayOrder: number;
+  isActive: boolean;
+  isFeatured: boolean;
 }
 
 /** Public review as returned by GET /api/reviews (only admin-approved reviews). */

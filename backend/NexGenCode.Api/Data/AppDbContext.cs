@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NexGenCode.Api.Models;
 
 namespace NexGenCode.Api.Data;
@@ -9,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<TeamMember> TeamMembers => Set<TeamMember>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<ContactSubmission> ContactSubmissions => Set<ContactSubmission>();
+    public DbSet<Project> Projects => Set<Project>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -20,6 +23,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             e.HasIndex(x => new { x.IsApproved, x.CreatedAt });
             e.ToTable(t => t.HasCheckConstraint("CK_Reviews_Rating", "[Rating] BETWEEN 1 AND 5"));
+        });
+
+        b.Entity<Project>(e =>
+        {
+            e.HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            // Tags as a JSON array in one column
+            e.Property(x => x.Tags)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>())
+                .HasMaxLength(1000)
+                .Metadata.SetValueComparer(new ValueComparer<List<string>>(
+                    (a, b) => a!.SequenceEqual(b!),
+                    v => v.Aggregate(0, (h, t) => HashCode.Combine(h, t.GetHashCode())),
+                    v => v.ToList()));
         });
 
         b.Entity<ContactSubmission>(e =>

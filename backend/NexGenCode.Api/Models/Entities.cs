@@ -130,3 +130,43 @@ public class ContactSubmission
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
+
+/// <summary>A portfolio project shown on /portfolio (and the homepage when featured).</summary>
+public class Project
+{
+    public int Id { get; set; }
+
+    [MaxLength(160)]
+    public required string Title { get; set; }
+
+    /// <summary>Filter category, e.g. "Web App", "Mobile App", "Cloud".</summary>
+    [MaxLength(60)]
+    public required string Category { get; set; }
+
+    [MaxLength(600)]
+    public string Description { get; set; } = "";
+
+    /// <summary>Screenshot (/uploads/...) or an absolute URL. Null = gradient placeholder.</summary>
+    [MaxLength(500)]
+    public string? ImageUrl { get; set; }
+
+    /// <summary>Chips shown on the card (e.g. "React", "ERP"). Stored as JSON.</summary>
+    public List<string> Tags { get; set; } = [];
+
+    /// <summary>Live link (Vercel deploy, website, store listing). Opens in a new tab.</summary>
+    [MaxLength(500)]
+    public string? Url { get; set; }
+
+    /// <summary>Tailwind gradient used when there is no image, e.g. "from-sky-500 to-cyan-500".</summary>
+    [MaxLength(80)]
+    public string Accent { get; set; } = "from-sky-500 to-cyan-500";
+
+    public int DisplayOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+
+    /// <summary>Featured projects are shown on the homepage.</summary>
+    public bool IsFeatured { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}

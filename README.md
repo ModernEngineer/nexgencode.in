@@ -62,6 +62,7 @@ Open **http://localhost:5173/admin/login**, or use the **Admin Login** link in t
 - **Enquiries** — every contact-form submission, with status (New / In progress / Closed), internal notes, reply links and CSV export.
 - **Client Reviews** — reviews submitted on the website arrive as *Pending*. Only reviews switched to **Show on website** appear on the site, with their star rating. You can also add, edit, feature or delete reviews.
 - **Core Team** — full control of the "Meet Our Core Team" page: add, edit, photo upload, title, bio, order, show/hide and delete.
+- **Portfolio** — add/edit/delete projects: screenshot, title, category (drives the filter buttons), description, tag chips, live link (opens in a new tab), card colour, order, show/hide and "show on homepage".
 
 ### Production
 
@@ -74,7 +75,8 @@ Open **http://localhost:5173/admin/login**, or use the **Admin Login** link in t
 Some content is still sample/placeholder and should be replaced:
 
 - **Team members & client reviews** — sample Indian names seeded into the database. Edit or replace them from the admin panel.
-- **Portfolio & stats** — sample data in `src/data/projects.ts` and `src/data/process.ts`
+- **Portfolio** — sample projects seeded into the database; replace them from Admin → Portfolio
+- **Stats** — sample numbers in `src/data/process.ts`
 - **Legal pages** — the Privacy Policy and Terms (`src/data/legal.ts`) are templates; have them reviewed
 
 See [CLAUDE.md](CLAUDE.md) for a fuller architecture overview.

@@ -135,3 +135,47 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004121922_AddProjects'
+)
+BEGIN
+    CREATE TABLE [Projects] (
+        [Id] int NOT NULL IDENTITY,
+        [Title] nvarchar(160) NOT NULL,
+        [Category] nvarchar(60) NOT NULL,
+        [Description] nvarchar(600) NOT NULL,
+        [ImageUrl] nvarchar(500) NULL,
+        [Tags] nvarchar(1000) NOT NULL,
+        [Url] nvarchar(500) NULL,
+        [Accent] nvarchar(80) NOT NULL,
+        [DisplayOrder] int NOT NULL,
+        [IsActive] bit NOT NULL,
+        [IsFeatured] bit NOT NULL,
+        [CreatedAt] datetime2 NOT NULL,
+        [UpdatedAt] datetime2 NOT NULL,
+        CONSTRAINT [PK_Projects] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004121922_AddProjects'
+)
+BEGIN
+    CREATE INDEX [IX_Projects_IsActive_DisplayOrder] ON [Projects] ([IsActive], [DisplayOrder]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004121922_AddProjects'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261004121922_AddProjects', N'10.0.12');
+END;
+
+COMMIT;
+GO
+

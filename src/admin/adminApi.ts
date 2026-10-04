@@ -1,5 +1,5 @@
 import { api } from '../lib/api';
-import type { TeamMember } from '../types';
+import type { Project, TeamMember } from '../types';
 
 export type EnquiryStatus = 'New' | 'InProgress' | 'Closed';
 
@@ -33,6 +33,7 @@ export interface AdminReview {
 }
 
 export type ReviewInput = Omit<AdminReview, 'id' | 'source' | 'createdAt'>;
+export type ProjectInput = Omit<Project, 'id' | 'displayOrder'>;
 export type TeamMemberInput = Omit<TeamMember, 'id' | 'displayOrder'> & { displayOrder?: number | null };
 
 export interface Paged<T> {
@@ -91,6 +92,18 @@ export const adminApi = {
     api<void>(`/api/admin/team/${id}/active`, { ...auth, method: 'PATCH', body: isActive }),
   reorderTeam: (ids: number[]) => api<void>('/api/admin/team/reorder', { ...auth, method: 'PUT', body: { ids } }),
   deleteMember: (id: number) => api<void>(`/api/admin/team/${id}`, { ...auth, method: 'DELETE' }),
+
+  // Portfolio projects
+  projects: () => api<Project[]>('/api/admin/projects', auth),
+  createProject: (body: ProjectInput) => api<Project>('/api/admin/projects', { ...auth, method: 'POST', body }),
+  updateProject: (id: number, body: ProjectInput) =>
+    api<Project>(`/api/admin/projects/${id}`, { ...auth, method: 'PUT', body }),
+  setProjectActive: (id: number, isActive: boolean) =>
+    api<void>(`/api/admin/projects/${id}/active`, { ...auth, method: 'PATCH', body: isActive }),
+  setProjectFeatured: (id: number, isFeatured: boolean) =>
+    api<void>(`/api/admin/projects/${id}/featured`, { ...auth, method: 'PATCH', body: isFeatured }),
+  reorderProjects: (ids: number[]) => api<void>('/api/admin/projects/reorder', { ...auth, method: 'PUT', body: { ids } }),
+  deleteProject: (id: number) => api<void>(`/api/admin/projects/${id}`, { ...auth, method: 'DELETE' }),
 
   // Uploads & account
   uploadImage: (file: File) => {

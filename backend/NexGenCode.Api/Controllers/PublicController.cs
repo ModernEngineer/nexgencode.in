@@ -21,6 +21,15 @@ public class PublicController(AppDbContext db, ILogger<PublicController> logger)
             .ToListAsync())
         .Select(TeamMemberDto.From);
 
+    /// <summary>Active portfolio projects in display order. ?featured=true returns only homepage projects.</summary>
+    [HttpGet("projects")]
+    public async Task<IEnumerable<ProjectDto>> Projects([FromQuery] bool featured = false)
+    {
+        var q = db.Projects.AsNoTracking().Where(p => p.IsActive);
+        if (featured) q = q.Where(p => p.IsFeatured);
+        return (await q.OrderBy(p => p.DisplayOrder).ThenBy(p => p.Id).ToListAsync()).Select(ProjectDto.From);
+    }
+
     /// <summary>Approved (admin-enabled) reviews only, featured first.</summary>
     [HttpGet("reviews")]
     public async Task<IActionResult> Reviews([FromQuery] int? limit)

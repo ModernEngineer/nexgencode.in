@@ -103,3 +103,25 @@ public record PagedResult<T>(IReadOnlyList<T> Items, int Total, int Page, int Pa
 public record DashboardStats(
     int NewEnquiries, int TotalEnquiries, int PendingReviews, int ApprovedReviews, int ActiveTeamMembers,
     double AverageRating, IReadOnlyList<ContactSubmissionDto> LatestEnquiries, IReadOnlyList<ReviewDto> LatestPendingReviews);
+
+// ---------- Portfolio projects ----------
+
+public record ProjectDto(
+    int Id, string Title, string Category, string Description, string? ImageUrl, IReadOnlyList<string> Tags,
+    string? Url, string Accent, int DisplayOrder, bool IsActive, bool IsFeatured)
+{
+    public static ProjectDto From(Project p) =>
+        new(p.Id, p.Title, p.Category, p.Description, p.ImageUrl, p.Tags, p.Url, p.Accent, p.DisplayOrder, p.IsActive,
+            p.IsFeatured);
+}
+
+public record ProjectInput(
+    [Required, MaxLength(160)] string Title,
+    [Required, MaxLength(60)] string Category,
+    [MaxLength(600)] string? Description,
+    [MaxLength(500)] string? ImageUrl,
+    [MaxLength(12)] List<string>? Tags,
+    [MaxLength(500), Url] string? Url,
+    [MaxLength(80)] string? Accent,
+    bool IsActive = true,
+    bool IsFeatured = false);

@@ -10,7 +10,7 @@ namespace NexGenCode.Api.Data;
 /// </summary>
 public static class DbSeeder
 {
-    public static async Task SeedAsync(AppDbContext db, IConfiguration config, ILogger logger)
+    public static async Task SeedAsync(AppDbContext db, IConfiguration config, IWebHostEnvironment env, ILogger logger)
     {
         if (!await db.AdminUsers.AnyAsync())
         {
@@ -86,6 +86,53 @@ public static class DbSeeder
                     Rating = 4, IsApproved = true, Source = "admin", CreatedAt = now.AddDays(-4),
                     Comment = "Fast POS billing with barcode support and GST reports. Very easy for my staff to learn, and stock tracking is accurate.",
                 });
+        }
+
+        if (!await db.Projects.AnyAsync())
+        {
+            // Screenshots ship in SeedData/projects and are copied into wwwroot/uploads like admin uploads
+            string? SeedImage(string file)
+            {
+                var source = Path.Combine(env.ContentRootPath, "SeedData", "projects", file);
+                if (!File.Exists(source)) return null;
+                var uploads = Path.Combine(env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot"), "uploads");
+                Directory.CreateDirectory(uploads);
+                var name = $"seed-{file}";
+                var target = Path.Combine(uploads, name);
+                if (!File.Exists(target)) File.Copy(source, target);
+                return $"/uploads/{name}";
+            }
+
+            var projects = new List<Project>
+            {
+                new() { Title = "IronPulse — Strength Studio", Category = "Web App", Accent = "from-indigo-500 to-blue-500",
+                    Description = "A bold fitness studio website for memberships, coaching, training plans and gym community engagement.",
+                    Tags = ["React", "Fitness", "Responsive UI"], ImageUrl = SeedImage("ironpulse.png"),
+                    Url = "https://gym-wwyd.vercel.app/", IsFeatured = true },
+                new() { Title = "Billing ERP — Business Management Platform", Category = "Web App", Accent = "from-emerald-500 to-teal-500",
+                    Description = "A modern billing platform for managing invoices, inventory, sales, payments and business operations.",
+                    Tags = ["React", "ERP", "Billing"], ImageUrl = SeedImage("billing-erp.png"),
+                    Url = "https://billing-software-livid-omega.vercel.app/", IsFeatured = true },
+                new() { Title = "Saffron & Ember — Fine Indian Dining", Category = "Web App", Accent = "from-amber-500 to-orange-500",
+                    Description = "An atmospheric restaurant website for showcasing the menu, story, gallery and table reservations.",
+                    Tags = ["React", "Restaurant", "Reservations"], ImageUrl = SeedImage("saffron-ember.png"),
+                    Url = "https://restorent-ruddy.vercel.app/", IsFeatured = true },
+                new() { Title = "Hospital — Healthcare Management Platform", Category = "Web App", Accent = "from-fuchsia-500 to-pink-500",
+                    Description = "A modern hospital website for exploring healthcare services, departments, doctors, appointments and patient support in one accessible digital experience.",
+                    Tags = ["React", "Healthcare", "Appointments"], ImageUrl = SeedImage("hospital.png"),
+                    Url = "https://hospital-iota-sable.vercel.app/" },
+                new() { Title = "OpSight — DevOps Observability Suite", Category = "Cloud", Accent = "from-amber-500 to-orange-500",
+                    Description = "Unified logging, metrics and alerting for microservice fleets, deployed across AWS and Kubernetes.",
+                    Tags = ["Kubernetes", "Grafana", "Go"] },
+                new() { Title = "DocMind — AI Document Assistant", Category = "AI / ML", Accent = "from-violet-500 to-indigo-500",
+                    Description = "An LLM-powered assistant that extracts, summarises and answers questions over large document sets.",
+                    Tags = ["LLMs", "Python", "Vector Search"] },
+                new() { Title = "RouteWise — Fleet Logistics Dashboard", Category = "Web App", Accent = "from-sky-500 to-cyan-500",
+                    Description = "A live fleet-tracking and route optimisation dashboard used by logistics operators to cut fuel costs.",
+                    Tags = ["React", "Mapbox", "PostgreSQL"] },
+            };
+            for (var i = 0; i < projects.Count; i++) projects[i].DisplayOrder = i + 1;
+            db.Projects.AddRange(projects);
         }
 
         await db.SaveChangesAsync();

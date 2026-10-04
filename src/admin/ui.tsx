@@ -305,7 +305,7 @@ export function ImageUpload({
 }: {
   value?: string | null;
   onChange: (url: string | null) => void;
-  shape?: 'square' | 'circle';
+  shape?: 'square' | 'circle' | 'wide';
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -337,7 +337,8 @@ export function ImageUpload({
     <div className="flex items-center gap-4">
       <div
         className={clsx(
-          'flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden border border-dashed border-ink-300 bg-ink-50',
+          'flex shrink-0 items-center justify-center overflow-hidden border border-dashed border-ink-300 bg-ink-50',
+          shape === 'wide' ? 'h-24 w-40 rounded-xl' : 'h-24 w-24',
           shape === 'circle' ? 'rounded-full' : 'rounded-xl'
         )}
       >
@@ -360,7 +361,9 @@ export function ImageUpload({
             </button>
           )}
         </div>
-        <p className="text-xs text-ink-400">JPG, PNG or WebP · max 3 MB · square photos look best</p>
+        <p className="text-xs text-ink-400">
+          JPG, PNG or WebP · max 3 MB · {shape === 'wide' ? 'landscape screenshots (16:9) look best' : 'square photos look best'}
+        </p>
         {error && <p className="text-xs text-red-600">{error}</p>}
       </div>
       <input
@@ -433,5 +436,68 @@ export function CheckItem({ ok, label }: { ok: boolean; label: string }) {
       {ok ? <CheckCircle2 size={14} /> : <span className="inline-block h-3.5 w-3.5 rounded-full border border-current" />}
       {label}
     </li>
+  );
+}
+
+// ---------- Tag (chip) input ----------
+
+/** Type a tag and press Enter or comma to add it; click × to remove. */
+export function TagInput({
+  value,
+  onChange,
+  max = 12,
+  placeholder = 'Type and press Enter',
+}: {
+  value: string[];
+  onChange: (tags: string[]) => void;
+  max?: number;
+  placeholder?: string;
+}) {
+  const [draft, setDraft] = useState('');
+
+  const add = (raw: string) => {
+    const parts = raw.split(',').map((t) => t.trim()).filter(Boolean);
+    const next = [...value];
+    for (const t of parts) {
+      if (next.length >= max) break;
+      if (t.length <= 40 && !next.some((x) => x.toLowerCase() === t.toLowerCase())) next.push(t);
+    }
+    onChange(next);
+    setDraft('');
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-ink-200 bg-white px-2.5 py-2 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/15">
+      {value.map((tag) => (
+        <span key={tag} className="inline-flex items-center gap-1 rounded-full bg-brand-50 py-1 pl-3 pr-1.5 text-xs font-medium text-brand-800">
+          {tag}
+          <button
+            type="button"
+            onClick={() => onChange(value.filter((t) => t !== tag))}
+            className="rounded-full p-0.5 hover:bg-brand-100"
+            aria-label={`Remove ${tag}`}
+          >
+            <X size={12} />
+          </button>
+        </span>
+      ))}
+      {value.length < max && (
+        <input
+          value={draft}
+          onChange={(e) => (e.target.value.endsWith(',') ? add(e.target.value) : setDraft(e.target.value))}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              if (draft.trim()) add(draft);
+            } else if (e.key === 'Backspace' && !draft && value.length) {
+              onChange(value.slice(0, -1));
+            }
+          }}
+          onBlur={() => draft.trim() && add(draft)}
+          placeholder={value.length ? '' : placeholder}
+          className="min-w-[8rem] flex-1 border-0 bg-transparent px-1 py-1 text-sm text-ink-900 outline-none placeholder:text-ink-400"
+        />
+      )}
+    </div>
   );
 }

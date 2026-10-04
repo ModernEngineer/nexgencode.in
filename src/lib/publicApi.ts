@@ -1,7 +1,10 @@
 import { api } from './api';
-import type { ReviewsResponse, TeamMember } from '../types';
+import type { Project, ReviewsResponse, TeamMember } from '../types';
 
 export const getTeam = (signal?: AbortSignal) => api<TeamMember[]>('/api/team', { signal });
+
+export const getProjects = (featured = false, signal?: AbortSignal) =>
+  api<Project[]>(`/api/projects${featured ? '?featured=true' : ''}`, { signal });
 
 export const getReviews = (limit?: number, signal?: AbortSignal) =>
   api<ReviewsResponse>(`/api/reviews${limit ? `?limit=${limit}` : ''}`, { signal });
