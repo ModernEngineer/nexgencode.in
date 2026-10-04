@@ -280,9 +280,10 @@ export const organizationJsonLd = {
   priceRange: '₹₹',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: contactInfo.officeLocality,
+    streetAddress: contactInfo.officeStreet,
     addressLocality: 'Prayagraj',
     addressRegion: 'Uttar Pradesh',
+    postalCode: contactInfo.officePostalCode,
     addressCountry: 'IN',
   },
   areaServed: { '@type': 'Country', name: 'India' },
