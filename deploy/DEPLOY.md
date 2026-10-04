@@ -5,7 +5,7 @@ What runs on the server:
 | Part | Where | How |
 |---|---|---|
 | Website (React, prerendered) | `/var/www/nexgencode.in/html` | static files served by Nginx |
-| API (.NET 10) | `/var/www/nexgencode.in/api` | systemd service `nexgencode-api` on `127.0.0.1:5080`, proxied at `/api` |
+| API (.NET 10) | `/var/www/nexgencode.in/api` | systemd service `nexgencode-api` on `127.0.0.1:5090`, proxied at `/api` |
 | Database | SQL Server 2022 Express | `localhost:1433`, database `NexGenCodeDb` (not reachable from the internet) |
 | Uploaded images | `/var/www/nexgencode.in/api/wwwroot/uploads` | served at `/uploads` |
 
@@ -28,7 +28,7 @@ df -h /            # disk: keep at least 10 GB free
 sudo ufw allow OpenSSH
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
-sudo ufw status          # 1433 (SQL Server) and 5080 (API) must NOT be listed
+sudo ufw status          # 5090 (API) must NOT be listed
 ```
 
 ## 3. Install SQL Server 2022 (Express, free)
@@ -143,8 +143,8 @@ This builds and publishes the API, starts it (which creates the tables and the s
 Check the API:
 
 ```bash
-curl -s http://127.0.0.1:5080/api/health          # {"status":"ok"}
-curl -s http://127.0.0.1:5080/api/projects | head -c 300
+curl -s http://127.0.0.1:5090/api/health          # {"status":"ok"}
+curl -s http://127.0.0.1:5090/api/projects | head -c 300
 ```
 
 ## 10. Nginx + HTTPS
@@ -155,7 +155,7 @@ sudo certbot certificates          # nexgencode.in AND www.nexgencode.in must bo
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot certonly --nginx -d nexgencode.in -d www.nexgencode.in
 
-sudo mkdir -p /var/www/letsencrypt
+sudo mkdir -p /var/www/nexgencode.in/letsencrypt
 sudo cp deploy/nginx/nexgencode.in.conf /etc/nginx/sites-available/nexgencode.in
 sudo ln -sf /etc/nginx/sites-available/nexgencode.in /etc/nginx/sites-enabled/nexgencode.in
 
@@ -218,7 +218,7 @@ Uploaded images and database content are never touched by a deploy.
 | API log says "Login failed for user 'nexgencode'" | password in `/etc/nexgencode-api.env` doesn't match step 4 |
 | API log says "Jwt:Key must be configured" | `Jwt__Key` missing in `/etc/nexgencode-api.env`, then `sudo systemctl restart nexgencode-api` |
 | SQL Server not running | `sudo systemctl status mssql-server`, `sudo journalctl -u mssql-server -n 50` |
-| 502 Bad Gateway on `/api` | API not running on 127.0.0.1:5080 (see first row) |
+| 502 Bad Gateway on `/api` | API not running on 127.0.0.1:5090 (see first row) |
 | Website shows old version | hard refresh (Ctrl+F5); check `ls -l /var/www/nexgencode.in/html/index.html` timestamp |
 | Image upload fails | `sudo chown -R www-data:www-data /var/www/nexgencode.in/api/wwwroot/uploads` |
 | Nginx errors | `sudo nginx -t`, `sudo tail -n 50 /var/log/nginx/error.log` |
