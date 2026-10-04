@@ -1,33 +1,24 @@
 import type { TeamMember } from '../types';
 
-// Sample team roster — replace with real team profiles before launch.
-export const team: TeamMember[] = [
-  {
-    id: 'm1',
-    name: 'Aditya Rao',
-    role: 'Founder & CEO',
-    bio: 'Leads company vision and engineering strategy with over a decade building products across fintech and health-tech.',
-    initials: 'AR',
-  },
-  {
-    id: 'm2',
-    name: 'Priya Nair',
-    role: 'Head of Engineering',
-    bio: 'Oversees delivery quality and technical architecture across every client engagement.',
-    initials: 'PN',
-  },
-  {
-    id: 'm3',
-    name: 'Karan Malhotra',
-    role: 'Lead Product Designer',
-    bio: 'Drives the design process from research to prototype, focused on usability and craft.',
-    initials: 'KM',
-  },
-  {
-    id: 'm4',
-    name: 'Neha Joshi',
-    role: 'Engineering Manager, Cloud',
-    bio: 'Leads the cloud & DevOps practice, specialising in scalable infrastructure and observability.',
-    initials: 'NJ',
-  },
+// Fallback roster shown if the API is unreachable (and in the prerendered HTML).
+// The live team is managed from the admin panel (Admin → Team) and served by GET /api/team.
+const t = (id: number, name: string, title: string, bio: string): TeamMember => ({
+  id,
+  name,
+  title,
+  bio,
+  imageUrl: null,
+  displayOrder: id,
+  isActive: true,
+});
+
+export const fallbackTeam: TeamMember[] = [
+  t(1, 'Aarav Sharma', 'Founder & CEO', 'Leads strategy and client partnerships, with a decade of experience building business software for Indian SMEs.'),
+  t(2, 'Priya Verma', 'Head of UI/UX Design', 'Turns complex workflows into clean, intuitive interfaces for web, mobile and dashboards.'),
+  t(3, 'Rohit Mishra', 'Lead Full-Stack Engineer', 'Architects scalable React, Node.js and .NET applications — from ERP systems to e-commerce platforms.'),
+  t(4, 'Neha Gupta', 'Project Manager', 'Keeps every project on track with clear milestones, transparent updates and on-time delivery.'),
+  t(5, 'Ankit Srivastava', 'Mobile App Lead', 'Builds fast, reliable Android and iOS apps with React Native and modern backend integrations.'),
+  t(6, 'Sneha Tripathi', 'Digital Marketing Lead', 'Drives growth through SEO, Meta Ads and Google Ads campaigns focused on measurable results.'),
+  t(7, 'Vikas Yadav', 'Cloud & DevOps Engineer', 'Handles hosting, deployment, security and monitoring so client systems stay fast and stable.'),
+  t(8, 'Pooja Singh', 'QA Lead', 'Tests every release across devices and workflows so bugs are caught long before users see them.'),
 ];

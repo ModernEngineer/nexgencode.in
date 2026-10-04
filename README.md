@@ -37,13 +37,46 @@ npm run lint      # run oxlint
 - **Office** — Prayagraj, India.
 - **Budget ranges** on the contact form are in INR (₹ Lakh).
 
+## Backend API & admin panel
+
+The website reads team members and client reviews from, and saves contact-form enquiries to, an ASP.NET Core (.NET 10) Web API with a SQL Server database. The API lives in [backend/NexGenCode.Api](backend/NexGenCode.Api).
+
+### Run locally
+
+1. **Database:** SQL Server 2022 or newer (Express is fine). The default connection string in `backend/NexGenCode.Api/appsettings.json` points to `localhost\SQLEXPRESS` with Windows authentication and a database named `NexGenCodeDb`. Change it if your instance is different.
+2. **Local settings:** copy `backend/NexGenCode.Api/appsettings.Development.example.json` to `appsettings.Development.json`, and set `Jwt:Key` to a random string of 32+ characters.
+3. **Start the API** (creates the database, applies migrations and seeds sample data on first run):
+   ```bash
+   cd backend/NexGenCode.Api
+   dotnet run --launch-profile http     # http://localhost:5080
+   ```
+4. **Start the website** in another terminal: `npm run dev`. Vite proxies `/api` and `/uploads` to the API.
+
+To create the database by hand instead, run [backend/database/NexGenCodeDb.sql](backend/database/NexGenCodeDb.sql) in SSMS. It is an idempotent script generated from the EF Core migrations.
+
+### Admin panel
+
+Open **http://localhost:5173/admin/login**, or use the **Admin Login** link in the footer.
+
+- Default login: `admin` / `Admin@12345`. **Change it right away** in Admin → Settings.
+- **Enquiries** — every contact-form submission, with status (New / In progress / Closed), internal notes, reply links and CSV export.
+- **Client Reviews** — reviews submitted on the website arrive as *Pending*. Only reviews switched to **Show on website** appear on the site, with their star rating. You can also add, edit, feature or delete reviews.
+- **Core Team** — full control of the "Meet Our Core Team" page: add, edit, photo upload, title, bio, order, show/hide and delete.
+- **Portfolio** — add/edit/delete projects: screenshot, title, category (drives the filter buttons), description, tag chips, live link (opens in a new tab), card colour, order, show/hide and "show on homepage".
+
+### Production
+
+- Set `ConnectionStrings__Default`, `Jwt__Key` (32+ random characters) and `Admin__DefaultPassword` (used only to create the first admin) as environment variables on the API server, and list your site's URL in `Cors:AllowedOrigins`.
+- Build the website with `VITE_API_URL=https://<your-api-domain>` (see `.env.example`).
+- Uploaded images are stored in `backend/NexGenCode.Api/wwwroot/uploads` — keep that folder on persistent storage and back it up with the database.
+
 ## Before going live
 
 Some content is still sample/placeholder and should be replaced:
 
-- **Team, testimonials, portfolio, stats** — sample data in `src/data/*.ts`, clearly marked with comments
-- **Contact form** — currently simulates a submission client-side only; wire it up to a real backend or form service (see the comment in [ContactForm.tsx](src/components/sections/ContactForm.tsx))
-- **Social links** — placeholder `#` links in the footer (Twitter/LinkedIn/GitHub-style icons)
-- **Email address** — `info@nexgencode.com` assumes that domain is registered; update if not
+- **Team members & client reviews** — sample Indian names seeded into the database. Edit or replace them from the admin panel.
+- **Portfolio** — sample projects seeded into the database; replace them from Admin → Portfolio
+- **Stats** — sample numbers in `src/data/process.ts`
+- **Legal pages** — the Privacy Policy and Terms (`src/data/legal.ts`) are templates; have them reviewed
 
 See [CLAUDE.md](CLAUDE.md) for a fuller architecture overview.

@@ -8,7 +8,7 @@ import ScrollToTop from './ScrollToTop';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-ink-950">
+    <div className="flex min-h-screen flex-col bg-ink-900/60">
       <ScrollProgressBar />
       <ScrollToTop />
       <Navbar />

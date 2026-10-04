@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# .NET API (backend/)
+backend/**/bin/
+backend/**/obj/
+# Local secrets (JWT key, default admin password) — copy appsettings.Development.example.json
+backend/NexGenCode.Api/appsettings.Development.json
+# Uploaded images (team photos, review photos)
+backend/NexGenCode.Api/wwwroot/uploads/*
+!backend/NexGenCode.Api/wwwroot/uploads/.gitkeep
+
+# Local env files
+.env
+.env.*.local

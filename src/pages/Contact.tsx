@@ -2,22 +2,27 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import Container from '../components/ui/Container';
 import ContactForm from '../components/sections/ContactForm';
+import FAQ from '../components/sections/FAQ';
 import Reveal from '../components/motion/Reveal';
 import { StaggerGroup, StaggerItem } from '../components/motion/Stagger';
+import { contactInfo } from '../data/contact';
+import { useSeo } from '../hooks/useSeo';
 
 const details = [
-  { icon: Mail, label: 'Email', value: 'info@nexgencode.in', href: 'mailto:info@nexgencode.in' },
-  { icon: Phone, label: 'Phone', value: '+91 94501 90953', href: 'tel:+919450190953' },
-  { icon: MapPin, label: 'Office', value: 'Prayagraj, India', href: undefined },
+  { icon: Mail, label: 'Email', value: contactInfo.email, href: `mailto:${contactInfo.email}` },
+  { icon: Phone, label: 'Phone', value: contactInfo.phoneDisplay, href: contactInfo.phoneHref },
+  { icon: MapPin, label: 'Office', value: contactInfo.office, href: contactInfo.officeMapUrl },
 ];
 
 export default function Contact() {
+  useSeo();
+
   return (
     <>
       <PageHeader
         eyebrow="Contact"
-        title="Let's talk about your project"
-        description="Share a few details about what you're building and we'll get back to you within one business day."
+        title="Start your project with NexGenCode"
+        description="Have a business idea, an existing system that needs improvement, or a process to automate? Share a few details and we'll get back to you within one business day."
       />
 
       <section className="py-24">
@@ -39,9 +44,13 @@ export default function Contact() {
                       <item.icon size={18} />
                     </span>
                     <div>
-                      <p className="text-xs text-ink-500">{item.label}</p>
+                      <p className="text-xs text-ink-400">{item.label}</p>
                       {item.href ? (
-                        <a href={item.href} className="text-sm font-medium text-white hover:text-brand-300">
+                        <a
+                          href={item.href}
+                          {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          className="text-sm font-medium text-white hover:text-brand-200"
+                        >
                           {item.value}
                         </a>
                       ) : (
@@ -59,6 +68,8 @@ export default function Contact() {
           </div>
         </Container>
       </section>
+
+      <FAQ />
     </>
   );
 }

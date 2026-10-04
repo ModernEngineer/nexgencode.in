@@ -7,16 +7,19 @@ import TechStack from '../components/sections/TechStack';
 import FeaturedProjects from '../components/sections/FeaturedProjects';
 import Testimonials from '../components/sections/Testimonials';
 import CTASection from '../components/sections/CTASection';
+import { useSeo } from '../hooks/useSeo';
 
 export default function Home() {
+  useSeo();
+
   return (
     <>
       <Hero />
       <Stats />
       <ServicesGrid />
+      <TechStack />
       <WhyChooseUs />
       <Process />
-      <TechStack />
       <FeaturedProjects />
       <Testimonials />
       <CTASection />
