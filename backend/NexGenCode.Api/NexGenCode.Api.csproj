@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Local dev secrets never ship; production settings come from /etc/nexgencode-api.env -->
+    <Content Update="appsettings.Development*.json" CopyToPublishDirectory="Never" />
     <!-- Sample portfolio screenshots copied into wwwroot/uploads on first run -->
     <None Update="SeedData\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

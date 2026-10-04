@@ -1,7 +1,9 @@
 import { api } from './api';
-import type { Project, ReviewsResponse, TeamMember } from '../types';
+import type { Project, ReviewsResponse, SocialLink, TeamMember } from '../types';
 
 export const getTeam = (signal?: AbortSignal) => api<TeamMember[]>('/api/team', { signal });
+
+export const getSocialLinks = (signal?: AbortSignal) => api<SocialLink[]>('/api/social-links', { signal });
 
 export const getProjects = (featured = false, signal?: AbortSignal) =>
   api<Project[]>(`/api/projects${featured ? '?featured=true' : ''}`, { signal });

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ExternalLink, FolderKanban, Inbox, LayoutDashboard, LogOut, Menu, MessageSquareQuote, Settings, Users, X } from 'lucide-react';
+import { ExternalLink, FolderKanban, Inbox, Share2, LayoutDashboard, LogOut, Menu, MessageSquareQuote, Settings, Users, X } from 'lucide-react';
 import clsx from 'clsx';
 import logoWhite from '../assest/nexgencodelogo.png';
 import { useAuth } from './auth';
@@ -13,6 +13,7 @@ const links = [
   { to: '/admin/reviews', label: 'Client Reviews', icon: MessageSquareQuote },
   { to: '/admin/team', label: 'Core Team', icon: Users },
   { to: '/admin/portfolio', label: 'Portfolio', icon: FolderKanban },
+  { to: '/admin/social-links', label: 'Social Links', icon: Share2 },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 

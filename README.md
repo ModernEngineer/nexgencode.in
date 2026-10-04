@@ -62,6 +62,7 @@ Open **http://localhost:5173/admin/login**, or use the **Admin Login** link in t
 - **Enquiries** — every contact-form submission, with status (New / In progress / Closed), internal notes, reply links and CSV export.
 - **Client Reviews** — reviews submitted on the website arrive as *Pending*. Only reviews switched to **Show on website** appear on the site, with their star rating. You can also add, edit, feature or delete reviews.
 - **Core Team** — full control of the "Meet Our Core Team" page: add, edit, photo upload, title, bio, order, show/hide and delete.
+- **Social Links** — footer social media icons (LinkedIn, Instagram, Facebook, X, YouTube, GitHub, WhatsApp, Telegram, Email, Website): add, change the link, show/hide, reorder or remove. The seeded links are dummies (marked "Dummy link") — replace them with your real profiles.
 - **Portfolio** — add/edit/delete projects: screenshot, title, category (drives the filter buttons), description, tag chips, live link (opens in a new tab), card colour, order, show/hide and "show on homepage".
 
 ### Production

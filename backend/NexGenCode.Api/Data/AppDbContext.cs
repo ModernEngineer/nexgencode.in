@@ -12,6 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<ContactSubmission> ContactSubmissions => Set<ContactSubmission>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -39,6 +40,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     v => v.Aggregate(0, (h, t) => HashCode.Combine(h, t.GetHashCode())),
                     v => v.ToList()));
         });
+
+        b.Entity<SocialLink>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
 
         b.Entity<ContactSubmission>(e =>
         {

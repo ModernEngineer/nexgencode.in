@@ -30,6 +30,13 @@ public class PublicController(AppDbContext db, ILogger<PublicController> logger)
         return (await q.OrderBy(p => p.DisplayOrder).ThenBy(p => p.Id).ToListAsync()).Select(ProjectDto.From);
     }
 
+    /// <summary>Footer social media icons that are switched on in the admin panel.</summary>
+    [HttpGet("social-links")]
+    public async Task<IEnumerable<SocialLinkDto>> SocialLinks() =>
+        (await db.SocialLinks.AsNoTracking().Where(s => s.IsActive)
+            .OrderBy(s => s.DisplayOrder).ThenBy(s => s.Id).ToListAsync())
+        .Select(SocialLinkDto.From);
+
     /// <summary>Approved (admin-enabled) reviews only, featured first.</summary>
     [HttpGet("reviews")]
     public async Task<IActionResult> Reviews([FromQuery] int? limit)

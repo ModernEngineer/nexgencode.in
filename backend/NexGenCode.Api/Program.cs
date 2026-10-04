@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NexGenCode.Api.Data;
@@ -59,6 +60,11 @@ builder.Services.AddRateLimiter(o =>
         _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(5) }));
 });
 
+// Behind Nginx: take the real client IP/scheme from X-Forwarded-* (trusted from localhost proxies only, the default),
+// otherwise every visitor looks like 127.0.0.1 and shares one rate-limit bucket.
+builder.Services.Configure<ForwardedHeadersOptions>(o =>
+    o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
+
 builder.Services.AddSingleton<ImageStorage>();
 builder.Services
     .AddControllers()
@@ -80,6 +86,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi(); // /openapi/v1.json
 }
 
+app.UseForwardedHeaders();
 app.UseStaticFiles(); // serves wwwroot/uploads
 app.UseCors();
 app.UseRateLimiter();

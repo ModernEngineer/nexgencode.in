@@ -179,3 +179,41 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004124645_AddSocialLinks'
+)
+BEGIN
+    CREATE TABLE [SocialLinks] (
+        [Id] int NOT NULL IDENTITY,
+        [Platform] nvarchar(30) NOT NULL,
+        [Label] nvarchar(80) NULL,
+        [Url] nvarchar(500) NOT NULL,
+        [DisplayOrder] int NOT NULL,
+        [IsActive] bit NOT NULL,
+        [UpdatedAt] datetime2 NOT NULL,
+        CONSTRAINT [PK_SocialLinks] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004124645_AddSocialLinks'
+)
+BEGIN
+    CREATE INDEX [IX_SocialLinks_IsActive_DisplayOrder] ON [SocialLinks] ([IsActive], [DisplayOrder]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261004124645_AddSocialLinks'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261004124645_AddSocialLinks', N'10.0.12');
+END;
+
+COMMIT;
+GO
+
