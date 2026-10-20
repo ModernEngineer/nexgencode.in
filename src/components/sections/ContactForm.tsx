@@ -45,12 +45,18 @@ export default function ContactForm() {
     if (Object.keys(validationErrors).length > 0) return;
 
     setStatus('submitting');
-    // No backend is wired up yet — replace this with a real API call or form service
-    // (e.g. your own endpoint, Formspree, or a serverless function) before going live.
-    window.setTimeout(() => {
+    fetch('/api/contacts', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(values),
+    }).then((response) => {
+      if (!response.ok) throw new Error('Unable to send message');
       setStatus('success');
       setValues(initialState);
-    }, 900);
+    }).catch(() => {
+      setStatus('idle');
+      setErrors({ message: 'Unable to send your message. Please try again.' });
+    });
   };
 
   return (
